@@ -5,8 +5,12 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "pylint-pytest"
 version = "1.1.3rc1"
-authors     = [
-    {name = "Reverb Chu", email = "pylint-pytest@reverbc.tw"}
+authors = [
+    {name = "Reverb Chu"},
+]
+maintainers = [
+    {name = "Stavros Ntentos", email = "133706+stdedos@users.noreply.github.com"},
+    {name = "Pierre Sassoulas", email = "pierre.sassoulas@gmail.com"},
 ]
 description = "A Pylint plugin to suppress pytest-related false positives."
 readme      = "README.md"
