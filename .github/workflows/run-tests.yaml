@@ -53,10 +53,10 @@ jobs:
           FORCE_COLOR: 1
           PYTEST_CI_ARGS: --cov-report=xml --cov-report=html --junitxml=test_artifacts/test_report.xml --color=yes
         run: |
-          if [ "${{ matrix.os }}" == "windows-latest" ]; then
-              $TOX_ENV = "py$($matrix.python-version -replace '\.')"
+          if [[ "$RUNNER_OS" == "Windows" ]]; then
+            TOX_ENV="py${{ matrix.python-version | replace('.', '') }"
           else
-              TOX_ENV=$(echo "py${{ matrix.python-version }}" | tr -d .)
+            TOX_ENV="py${{ matrix.python-version//. }}"
           fi
           tox -e $TOX_ENV
         shell: bash
