@@ -54,25 +54,29 @@ jobs:
           PYTEST_CI_ARGS: --cov-report=xml --cov-report=html --junitxml=test_artifacts/test_report.xml --color=yes
         run: |
           if [[ "$RUNNER_OS" == "Windows" ]]; then
-            TOX_ENV="py${{ matrix.python-version }}:.="
+            setlocal enabledelayedexpansion
+            set "TOX_ENV=py$matrix_python_version"
+            set "TOX_ENV=!TOX_ENV:.=!"
+            echo "TOX_ENV=!TOX_ENV!" >> $GITHUB_ENV
+            endlocal
           else
             TOX_ENV=$(echo "py${{ matrix.python-version }}" | tr -d .)
           fi
           tox -e $TOX_ENV
         shell: bash
 
-      - name: Upload coverage reports to Codecov
-        uses: codecov/codecov-action@v3
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          flags: ${{ matrix.os }},${{ matrix.python-version }}
-          fail_ci_if_error: true
-          files: test_artifacts/cobertura.xml
+      # - name: Upload coverage reports to Codecov
+      #   uses: codecov/codecov-action@v3
+      #   with:
+      #     token: ${{ secrets.CODECOV_TOKEN }}
+      #     flags: ${{ matrix.os }},${{ matrix.python-version }}
+      #     fail_ci_if_error: true
+      #     files: test_artifacts/cobertura.xml
 
-      - name: Create artifacts
-        uses: actions/upload-artifact@v3
-        if: ${{ !cancelled() }}
-        with:
-          name: ${{ env.GITHUB_REPOSITORY_SLUG }}_test-artifacts_${{ github.event_name }}_${{ github.event.pull_request.number || github.sha }}_${{ matrix.os
-            }}_py${{ matrix.python-version }}
-          path: test_artifacts/
+      # - name: Create artifacts
+      #   uses: actions/upload-artifact@v3
+      #   if: ${{ !cancelled() }}
+      #   with:
+      #     name: ${{ env.GITHUB_REPOSITORY_SLUG }}_test-artifacts_${{ github.event_name }}_${{ github.event.pull_request.number || github.sha }}_${{ matrix.os
+      #       }}_py${{ matrix.python-version }}
+      #     path: test_artifacts/
