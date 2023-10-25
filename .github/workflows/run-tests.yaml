@@ -53,8 +53,13 @@ jobs:
           FORCE_COLOR: 1
           PYTEST_CI_ARGS: --cov-report=xml --cov-report=html --junitxml=test_artifacts/test_report.xml --color=yes
         run: |
-          TOX_ENV=$(python -c "print('py' + '${{ matrix.python-version }}'.replace('.', ''))")
+          if [ "${{ matrix.os }}" == "windows-latest" ]; then
+              SET TOX_ENV=py%matrix.python-version:.=%
+          else
+              TOX_ENV=$(echo "py${{ matrix.python-version }}" | tr -d .)
+          fi
           tox -e $TOX_ENV
+        shell: bash
 
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v3
