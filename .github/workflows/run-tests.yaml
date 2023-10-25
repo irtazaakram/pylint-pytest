@@ -54,11 +54,7 @@ jobs:
           PYTEST_CI_ARGS: --cov-report=xml --cov-report=html --junitxml=test_artifacts/test_report.xml --color=yes
         run: |
           if [[ "$RUNNER_OS" == "Windows" ]]; then
-            setlocal enabledelayedexpansion
-            set "TOX_ENV=py$matrix_python_version"
-            set "TOX_ENV=!TOX_ENV:.=!"
-            echo "TOX_ENV=!TOX_ENV!" >> $GITHUB_ENV
-            endlocal
+            TOX_ENV=$(echo "py${{ matrix.python-version }}" | tr -d .)
           else
             TOX_ENV=$(echo "py${{ matrix.python-version }}" | tr -d .)
           fi
